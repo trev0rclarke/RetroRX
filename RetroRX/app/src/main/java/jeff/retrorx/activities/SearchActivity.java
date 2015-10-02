@@ -39,9 +39,9 @@ public class SearchActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SearchResultModel model  = createMockData();
+//                SearchResultModel model  = createMockData();
+//                searchResultsList.setAdapter(new RecipeListAdapter(SearchActivity.this, model.getSearchResults()));
 
-                searchResultsList.setAdapter(new RecipeListAdapter(SearchActivity.this, model.getSearchResults()));
                 APIClient.getRecipeProvider()
                         .getRecipesByIngredient(searchInput.getText().toString())
                         .subscribeOn(Schedulers.newThread())
