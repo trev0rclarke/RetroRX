@@ -48,9 +48,4 @@ public class RecipeModel {
     public void setRecipeImageUrl(String recipeImageUrl) {
         this.recipeImageUrl = recipeImageUrl;
     }
-
-    @Override
-    public String toString(){
-        return recipeName + ", " + cuisine;
-    }
 }

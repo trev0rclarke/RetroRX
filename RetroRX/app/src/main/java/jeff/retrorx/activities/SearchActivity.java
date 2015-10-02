@@ -13,6 +13,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import jeff.retrorx.R;
+import jeff.retrorx.adapters.RecipeListAdapter;
 import jeff.retrorx.models.RecipeModel;
 import jeff.retrorx.models.SearchResultModel;
 import jeff.retrorx.services.APIClient;
@@ -38,45 +39,30 @@ public class SearchActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    SearchResultModel model  = createMockData();
-                    ArrayAdapter<RecipeModel> adapter = new ArrayAdapter<RecipeModel>(
-                            SearchActivity.this,
-                            android.R.layout.simple_list_item_1,
-                            model.getSearchResults()
-                    );
+                SearchResultModel model  = createMockData();
 
-                    searchResultsList.setAdapter(adapter);
-//                APIClient.getRecipeProvider()
-//                        .getRecipesByIngredient(searchInput.getText().toString())
-//                        .subscribeOn(Schedulers.newThread())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Subscriber<SearchResultModel>() {
-//
-//                            @Override
-//                            public void onCompleted() {
-//
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//                                int i = 0;
-//                            }
-//
-//                            @Override
-//                            public void onNext(SearchResultModel searchResultModel) {
-//                                // have to fake some results due to lack of API availability
-//                                searchResultModel = createMockData();
-//
-//                                // create an adapter
-//                                ArrayAdapter<RecipeModel> adapter = new ArrayAdapter<RecipeModel>(
-//                                        SearchActivity.this,
-//                                        android.R.layout.simple_list_item_1,
-//                                        searchResultModel.getSearchResults()
-//                                );
-//
-//                                searchResultsList.setAdapter(adapter);
-//                            }
-//                        });
+                searchResultsList.setAdapter(new RecipeListAdapter(SearchActivity.this, model.getSearchResults()));
+                APIClient.getRecipeProvider()
+                        .getRecipesByIngredient(searchInput.getText().toString())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<SearchResultModel>() {
+
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                int i = 0;
+                            }
+
+                            @Override
+                            public void onNext(SearchResultModel searchResultModel) {
+                                searchResultsList.setAdapter(new RecipeListAdapter(SearchActivity.this, searchResultModel.getSearchResults()));
+                            }
+                        });
            }
         });
     }
